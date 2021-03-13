@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install hidapi dependencies
+        # https://github.com/ruabmbua/hidapi-rs/blob/master/.travis.yml
+        run: |
+          sudo apt-get install libusb-1.0.0-dev libudev-dev libhidapi-dev
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
@@ -37,6 +41,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install hidapi dependencies
+        # https://github.com/ruabmbua/hidapi-rs/blob/master/.travis.yml
+        run: |
+          sudo apt-get install libusb-1.0.0-dev libudev-dev libhidapi-dev
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
