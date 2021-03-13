@@ -33,6 +33,12 @@ Note that this one does NOT handle packet decryption while it seems the packet i
 cargo install co2-mini-monitor
 ```
 
+You may need to install the following to build [hidapi-rs](https://github.com/ruabmbua/hidapi-rs).
+
+- libusb-1.0-0-dev
+- libudev-dev
+- libhidapi-dev
+
 ## See also
 
 - [co2monitor](https://github.com/maddindeiss/co2-monitor) - CUI tool which handle packet decryption
