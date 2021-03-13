@@ -1,0 +1,13 @@
+[package]
+name = "rs-co2-mini-monitor"
+version = "0.1.0"
+authors = ["Alisue <lambdalisue@hashnote.net>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.38"
+chrono = "0.4.19"
+hidapi = "1.2.5"
+json = "0.12.4"
