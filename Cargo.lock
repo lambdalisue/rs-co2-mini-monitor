@@ -32,6 +32,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "co2-mini-monitor"
+version = "0.1.1-alpha.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "hidapi",
+ "json",
+]
+
+[[package]]
 name = "hidapi"
 version = "1.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -78,16 +88,6 @@ name = "pkg-config"
 version = "0.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3831453b3449ceb48b6d9c7ad7c96d5ea673e9b470a1dc578c2ce6521230884c"
-
-[[package]]
-name = "rs-co2-mini-monitor"
-version = "0.1.1-alpha.0"
-dependencies = [
- "anyhow",
- "chrono",
- "hidapi",
- "json",
-]
 
 [[package]]
 name = "time"
