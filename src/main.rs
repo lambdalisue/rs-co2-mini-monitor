@@ -1,5 +1,5 @@
 use anyhow::Result;
-use chrono::Utc;
+use chrono::{SecondsFormat, Utc};
 use hidapi::HidApi;
 
 const VENDOR_ID: u16 = 0x04D9;
@@ -30,7 +30,7 @@ fn main() -> Result<()> {
         debug_assert!(n == 8, "Not enough bytes are read");
 
         if let Some(value) = parse_data(&buf) {
-            let time = Utc::now().to_rfc3339();
+            let time = Utc::now().to_rfc3339_opts(SecondsFormat::Secs, true);
             let obj = match value {
                 Value::CO2(val) => json::object! {
                     type: "co2",
