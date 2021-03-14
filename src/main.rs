@@ -17,6 +17,10 @@ fn main() -> Result<()> {
     let api = HidApi::new()?;
     let device = api.open(VENDOR_ID, PRODUCT_ID)?;
 
+    // Wake-up the device
+    let buf = [0u8; 9];
+    device.send_feature_report(&buf)?;
+
     // Use blocking mode
     device.set_blocking_mode(true)?;
 
