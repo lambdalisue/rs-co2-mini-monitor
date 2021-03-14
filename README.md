@@ -39,6 +39,30 @@ You may need to install the following to build [hidapi-rs](https://github.com/ru
 - libudev-dev
 - libhidapi-dev
 
+## Usage example
+
+### InfluxDB
+
+Use [jq][] to parse and format data and curl to send data to [influxdb][] like
+
+[jq]: https://stedolan.github.io/jq/
+[influxdb]: https://www.influxdata.com/
+
+```sh
+#!/bin/bash
+HOSTNAME="localhost:8086"
+ORG="YOUR ORG"
+BUCKET="YOUR BUCKET"
+TOKEN="YOUR TOKEN"
+/usr/local/bin/co2-mini-monitor \
+  | /usr/local/bin/jq -r --unbuffered '"\(.type) value=\(.value) \(.time | fromdate)"' \
+  | xargs -I{} curl --request POST \
+    "http://$HOSTNAME/api/v2/write?org=$ORG&bucket=$BUCKET&precision=s" \
+    --header "Authorization: Token $TOKEN" \
+    --data-raw {}
+```
+
+
 ## See also
 
 - [co2monitor](https://github.com/maddindeiss/co2-monitor) - CUI tool which handle packet decryption
