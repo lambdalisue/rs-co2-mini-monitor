@@ -1,0 +1,78 @@
+name: Release
+
+env:
+  APP_NAME: co2-mini-monitor
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        target:
+          - arm-unknown-linux-gnueabihf
+          - x86_64-unknown-linux-gnu
+          - x86_64-pc-windows-gnu
+        include:
+          - target: arm-unknown-linux-gnueabihf
+            os: ubuntu-latest
+            ext: ''
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            ext: ''
+          - target: x86_64-pc-windows-gnu
+            os: ubuntu-latest
+            ext: '.exe'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./.cross/build.sh ${{ matrix.target }}
+
+      # https://github.com/actions/cache/blob/master/examples.md#rust---cargo
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target=${{ matrix.target }}
+          use-cross: true
+
+      - run: |
+          zip --junk-paths ${{ env.APP_NAME }}-${{ matrix.target }} target/${{ matrix.target }}/release/${{ env.APP_NAME }}${{ matrix.ext }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: '${{ env.APP_NAME }}-${{ matrix.target }}.zip'
+          if-no-files-found: error
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          path: .
+      - run: find .
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./artifact/${{ env.APP_NAME }}-*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
